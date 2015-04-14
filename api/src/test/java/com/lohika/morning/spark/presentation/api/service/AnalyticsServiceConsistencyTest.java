@@ -1,10 +1,10 @@
 package com.lohika.morning.spark.presentation.api.service;
 
 import com.lohika.morning.spark.presentation.api.ApplicationConfiguration;
-import com.lohika.morning.spark.presentation.spark.client.context.AnalyticsSparkContext;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.EventsByParticipant;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantsByCompany;
+import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSparkContext;
 import java.util.List;
 import org.junit.After;
 import org.junit.Test;
@@ -23,6 +23,8 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration(classes = {ApplicationConfiguration.class, ApplicationConfigurationTest.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AnalyticsServiceConsistencyTest {
+
+    public static final int TOTAL_PARTICIPANTS = 383;
 
     @Autowired
     private AnalyticsSparkContext analyticsSparkContext;
@@ -52,7 +54,7 @@ public class AnalyticsServiceConsistencyTest {
 //        List<ParticipantsByCompany> participantsByCompaniesSQLResult = sqlImplementation
 //            .getParticipantsByCompanies(false);
 
-        assertThat(85, allOf(is(participantsByCompaniesRDDResult.size()), is(participantsByCompaniesDSLResult.size())));
+        assertThat(89, allOf(is(participantsByCompaniesRDDResult.size()), is(participantsByCompaniesDSLResult.size())));
         assertEquals(participantsByCompaniesRDDResult, participantsByCompaniesDSLResult);
     }
 
@@ -62,7 +64,7 @@ public class AnalyticsServiceConsistencyTest {
         List<String> uniqueParticipantsEmailsDSLResult = dslImplementation.getUniqueParticipantsEmails(false);
         List<String> uniqueParticipantsEmailsSQLResult = sqlImplementation.getUniqueParticipantsEmails(false);
 
-        assertThat(385, allOf(is(uniqueParticipantsEmailsRDDResult.size()),
+        assertThat(TOTAL_PARTICIPANTS, allOf(is(uniqueParticipantsEmailsRDDResult.size()),
                 is(uniqueParticipantsEmailsDSLResult.size()),
                 is(uniqueParticipantsEmailsSQLResult.size())));
 
@@ -76,7 +78,7 @@ public class AnalyticsServiceConsistencyTest {
         List<EventsByParticipant> eventsByParticipantsDSLResult = dslImplementation.getMostActiveParticipants(false);
         List<EventsByParticipant> eventsByParticipantsSQLResult = sqlImplementation.getMostActiveParticipants(false);
 
-        assertThat(385, allOf(is(eventsByParticipantsRDDResult.size()),
+        assertThat(TOTAL_PARTICIPANTS, allOf(is(eventsByParticipantsRDDResult.size()),
                               is(eventsByParticipantsDSLResult.size()),
                               is(eventsByParticipantsSQLResult.size())));
 
@@ -90,7 +92,7 @@ public class AnalyticsServiceConsistencyTest {
         List<ParticipantEmailPosition> participantsByPositionDSLResult = dslImplementation.getParticipantsByPosition("lead", false);
         List<ParticipantEmailPosition> participantsByPositionSQLResult = sqlImplementation.getParticipantsByPosition("lead", false);
 
-        assertThat(31, allOf(is(participantsByPositionRDDResult.size()),
+        assertThat(41, allOf(is(participantsByPositionRDDResult.size()),
                              is(participantsByPositionDSLResult.size()),
                              is(participantsByPositionSQLResult.size())));
 
@@ -104,7 +106,7 @@ public class AnalyticsServiceConsistencyTest {
         Long participantsCountDSLResult = dslImplementation.getParticipantsCount(false);
         Long participantsCountSQLResult = sqlImplementation.getParticipantsCount(false);
 
-        assertThat(385L, allOf(is(participantsCountRDDResult),
+        assertThat((long) TOTAL_PARTICIPANTS, allOf(is(participantsCountRDDResult),
                               is(participantsCountDSLResult),
                               is(participantsCountSQLResult)));
 

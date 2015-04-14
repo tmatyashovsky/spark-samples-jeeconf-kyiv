@@ -1,9 +1,9 @@
 package com.lohika.morning.spark.presentation.api.service;
 
-import com.lohika.morning.spark.presentation.spark.client.function.rdd.*;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.EventsByParticipant;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantsByCompany;
+import com.lohika.morning.spark.presentation.spark.driver.function.rdd.*;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

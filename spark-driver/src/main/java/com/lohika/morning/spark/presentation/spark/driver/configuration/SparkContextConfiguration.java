@@ -35,11 +35,17 @@ public class SparkContextConfiguration {
     @Value("${spark.distributed-libraries}")
     private String[] distributedLibraries;
 
-    @Value("${spark.spark.cores.max}")
+    @Value("${spark.cores.max}")
     private String coresMax;
 
     @Value("${spark.executor.memory}")
     private String executorMemory;
+
+    @Value("${spark.serializer}")
+    private String serializer;
+
+    @Value("${spark.sql.shuffle.partitions}")
+    private String sqlShufflePartitions;
 
     @Bean
     public SparkConfigurationBuilder sparkConfigurationBuilder() {
@@ -48,8 +54,10 @@ public class SparkContextConfiguration {
 
     private Map<String, String> sparkProperties() {
         Map<String, String> sparkProperties = new HashMap<>();
-        sparkProperties.put("spark.spark.cores.max", coresMax);
+        sparkProperties.put("spark.cores.max", coresMax);
         sparkProperties.put("spark.executor.memory", executorMemory);
+        sparkProperties.put("spark.serializer", serializer);
+        sparkProperties.put("spark.sql.shuffle.partitions", sqlShufflePartitions);
 
         return sparkProperties;
     }

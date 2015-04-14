@@ -1,9 +1,9 @@
 package com.lohika.morning.spark.presentation.api.service;
 
-import com.lohika.morning.spark.presentation.spark.client.context.AnalyticsSparkContext;
-import com.lohika.morning.spark.presentation.spark.client.context.AnalyticsSqlSparkContext;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.map.FileContentToFileNameFunction;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.map.FileContentToParticipantRowFunction;
+import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSparkContext;
+import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSqlSparkContext;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FilenameUtils;

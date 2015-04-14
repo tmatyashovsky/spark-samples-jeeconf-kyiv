@@ -1,8 +1,7 @@
 package com.lohika.morning.spark.presentation.spark.driver.configuration;
 
-import org.apache.spark.SparkConf;
-
 import java.util.Map;
+import org.apache.spark.SparkConf;
 
 /**
  * A Spring friendly builder to work around overloaded scala bean properties in SparkConf.
@@ -22,33 +21,27 @@ public class SparkConfigurationBuilder {
     }
 
     public SparkConf buildSparkConfiguration() {
-        SparkConf result = new SparkConf()
+        SparkConf sparkConf = new SparkConf()
                 .setMaster(master)
                 .setAppName(appName == null ? "name-not-set" : appName)
-                .setJars(jars);
+                .setJars(jars)
+                .set("spark.cores.max", sparkProperties.get("spark.cores.max"))
+                .set("spark.executor.memory", sparkProperties.get("spark.executor.memory"))
+                .set("spark.sql.shuffle.partitions", sparkProperties.get("spark.sql.shuffle.partitions"));
 
-        // Check if debug mode is on for executors.
-        boolean debugMode = false;
-        if(sparkProperties.get("spark.executor.isdebugmode") != null) {
-            try{
-                debugMode = Boolean.parseBoolean(sparkProperties.get("spark.executor.isdebugmode"));
-            } catch (Exception e) {
-                // Do nothing!
-            }
+        if (sparkProperties.get("spark.serializer").equals("org.apache.spark.serializer.KryoSerializer")) {
+            sparkConf.set("spark.kryo.registrationRequired", "false");
+            // TODO: not working property due to bug in Spark.
+//            sparkConf.registerKryoClasses(new Class[]{EventsByParticipant.class,
+//                                                      Participant.class,
+//                                                      ParticipantEmailPosition.class,
+//                                                      ParticipantsByCompany.class,
+//                                                      scala.Tuple3[].class,
+//                                                      Row[].class,
+//                                                      GenericRow.class,
+//                                                      Object[].class, scala.reflect.ClassTag$.class});
         }
 
-        for (Map.Entry<String, String> e : sparkProperties.entrySet()) {
-            // Add the extraJavaOptions only if the debug mode is true.
-            if(e.getKey().equals("spark.executor.extraJavaOptions")) {
-                if(debugMode) {
-                    result.set(e.getKey(), e.getValue());
-                }
-            } else {
-                result.set(e.getKey(), e.getValue());
-            }
-
-        }
-
-        return result;
+        return sparkConf;
     }
 }

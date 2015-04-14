@@ -27,7 +27,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.lohika.morning.spark.presentation</groupId>
-                <artifactId>spark-client</artifactId>
+                <artifactId>spark-driver</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

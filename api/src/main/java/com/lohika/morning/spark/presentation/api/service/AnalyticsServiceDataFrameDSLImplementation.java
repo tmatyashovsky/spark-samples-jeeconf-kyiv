@@ -1,6 +1,5 @@
 package com.lohika.morning.spark.presentation.api.service;
 
-import com.lohika.morning.spark.presentation.spark.client.reader.DataFrameDataFilesReader;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.dataframe.map.ToEventsByParticipantFunction;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.dataframe.map.ToParticipantEmailFunction;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.dataframe.map.ToParticipantEmailPositionFunction;
@@ -8,6 +7,7 @@ import com.lohika.morning.spark.presentation.spark.distributed.library.function.
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.EventsByParticipant;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantsByCompany;
+import com.lohika.morning.spark.presentation.spark.driver.reader.DataFrameDataFilesReader;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.lang3.text.WordUtils;
