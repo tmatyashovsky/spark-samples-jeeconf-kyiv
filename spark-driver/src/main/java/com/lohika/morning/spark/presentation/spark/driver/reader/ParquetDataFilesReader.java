@@ -14,6 +14,11 @@ public class ParquetDataFilesReader implements DataFrameDataFilesReader {
     @Override
     public DataFrame readAllParticipants(boolean includeOnlyPresentParticipants) {
         DataFrame participantsAsDataFrames = analyticsSqlSparkContext.readRawData();
+
+        if (includeOnlyPresentParticipants) {
+            participantsAsDataFrames = participantsAsDataFrames.filter(participantsAsDataFrames.col("present").equalTo(true));
+        }
+
         // In case we would like to execute traditional SQL.
         participantsAsDataFrames.registerTempTable("participants");
 

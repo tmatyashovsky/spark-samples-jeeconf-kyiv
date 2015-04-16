@@ -31,6 +31,8 @@ public class SparkConfigurationBuilder {
 
         if (sparkProperties.get("spark.serializer").equals("org.apache.spark.serializer.KryoSerializer")) {
             sparkConf.set("spark.kryo.registrationRequired", "false");
+            //  if you don’t register your custom classes, Kryo will still work,
+            // but it will have to store the full class name with each object, which is wasteful.
             // TODO: not working property due to bug in Spark.
 //            sparkConf.registerKryoClasses(new Class[]{EventsByParticipant.class,
 //                                                      Participant.class,
