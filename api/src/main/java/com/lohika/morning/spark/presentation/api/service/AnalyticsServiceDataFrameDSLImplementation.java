@@ -7,7 +7,7 @@ import com.lohika.morning.spark.presentation.spark.distributed.library.function.
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.EventsByParticipant;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantsByCompany;
-import com.lohika.morning.spark.presentation.spark.driver.reader.DataFrameDataFilesReader;
+import com.lohika.morning.spark.presentation.spark.driver.reader.DataFrameDataReader;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.lang3.text.WordUtils;
@@ -20,7 +20,7 @@ import scala.reflect.ClassTag$;
 public class AnalyticsServiceDataFrameDSLImplementation implements AnalyticsService {
 
     @Resource(name = "${dataFrameDataFilesReader}")
-    private DataFrameDataFilesReader dataFrameDataFilesReader;
+    private DataFrameDataReader dataFrameDataFilesReader;
 
     @Override
     public List<ParticipantsByCompany> getParticipantsByCompanies(boolean includeOnlyPresentParticipants) {
@@ -32,10 +32,12 @@ public class AnalyticsServiceDataFrameDSLImplementation implements AnalyticsServ
             .groupBy("companyName")
             .count();
 
-        return intermediateDataFrame.orderBy(intermediateDataFrame.col("count").desc(), intermediateDataFrame.col("companyName").asc())
-            .map(new ToParticipantsByCompanyFunction(), ClassTag$.MODULE$.<ParticipantsByCompany>apply(ParticipantsByCompany.class))
-            .toJavaRDD()
-            .collect();
+        return intermediateDataFrame.orderBy(
+                    intermediateDataFrame.col("count").desc(),
+                    intermediateDataFrame.col("companyName").asc())
+                .map(new ToParticipantsByCompanyFunction(), ClassTag$.MODULE$.<ParticipantsByCompany>apply(ParticipantsByCompany.class))
+                .toJavaRDD()
+                .collect();
     }
 
     @Override
@@ -60,8 +62,7 @@ public class AnalyticsServiceDataFrameDSLImplementation implements AnalyticsServ
                 positionColumn.contains(position).or(positionColumn.contains(WordUtils.capitalize(position))))
                 .groupBy("email", "position")
                 .count()
-                // TODO: order by email and position?
-                .orderBy("email")
+                .orderBy(emailColumn.asc(), positionColumn.asc())
                 .map(new ToParticipantEmailPositionFunction(), ClassTag$.MODULE$.<ParticipantEmailPosition>apply(ParticipantEmailPosition.class))
                 .toJavaRDD()
                 .collect();

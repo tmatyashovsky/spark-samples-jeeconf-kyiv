@@ -5,8 +5,8 @@ import org.apache.spark.sql.DataFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("parquetDataFilesReader")
-public class ParquetDataFilesReader implements DataFrameDataFilesReader {
+@Component("parquetDataReader")
+public class ParquetDataReader implements DataFrameDataReader {
 
     @Autowired
     private AnalyticsSqlSparkContext analyticsSqlSparkContext;

@@ -24,7 +24,8 @@ import static org.junit.Assert.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AnalyticsServiceConsistencyTest {
 
-    public static final int TOTAL_PARTICIPANTS = 383;
+    public static final int TOTAL_PARTICIPANTS = 426;
+    public static final int PRESENT_PARTICIPANTS = 300;
 
     @Autowired
     private AnalyticsSparkContext analyticsSparkContext;
@@ -51,11 +52,14 @@ public class AnalyticsServiceConsistencyTest {
         List<ParticipantsByCompany> participantsByCompaniesDSLResult = dslImplementation
             .getParticipantsByCompanies(false);
 
-//        List<ParticipantsByCompany> participantsByCompaniesSQLResult = sqlImplementation
-//            .getParticipantsByCompanies(false);
+        List<ParticipantsByCompany> participantsByCompaniesSQLResult = sqlImplementation
+            .getParticipantsByCompanies(false);
 
-        assertThat(89, allOf(is(participantsByCompaniesRDDResult.size()), is(participantsByCompaniesDSLResult.size())));
+        assertThat(93, allOf(is(participantsByCompaniesRDDResult.size()),
+                             is(participantsByCompaniesDSLResult.size()),
+                             is(participantsByCompaniesDSLResult.size())));
         assertEquals(participantsByCompaniesRDDResult, participantsByCompaniesDSLResult);
+        assertEquals(participantsByCompaniesRDDResult, participantsByCompaniesSQLResult);
     }
 
     @Test
@@ -92,7 +96,7 @@ public class AnalyticsServiceConsistencyTest {
         List<ParticipantEmailPosition> participantsByPositionDSLResult = dslImplementation.getParticipantsByPosition("lead", false);
         List<ParticipantEmailPosition> participantsByPositionSQLResult = sqlImplementation.getParticipantsByPosition("lead", false);
 
-        assertThat(41, allOf(is(participantsByPositionRDDResult.size()),
+        assertThat(43, allOf(is(participantsByPositionRDDResult.size()),
                              is(participantsByPositionDSLResult.size()),
                              is(participantsByPositionSQLResult.size())));
 
@@ -109,6 +113,20 @@ public class AnalyticsServiceConsistencyTest {
         assertThat((long) TOTAL_PARTICIPANTS, allOf(is(participantsCountRDDResult),
                               is(participantsCountDSLResult),
                               is(participantsCountSQLResult)));
+
+        assertEquals(participantsCountRDDResult, participantsCountDSLResult);
+        assertEquals(participantsCountRDDResult, participantsCountSQLResult);
+    }
+
+    @Test
+    public void shouldGetTheSamePresentParticipantsCount() {
+        Long participantsCountRDDResult = rddImplementation.getParticipantsCount(true);
+        Long participantsCountDSLResult = dslImplementation.getParticipantsCount(true);
+        Long participantsCountSQLResult = sqlImplementation.getParticipantsCount(true);
+
+        assertThat((long) PRESENT_PARTICIPANTS, allOf(is(participantsCountRDDResult),
+                is(participantsCountDSLResult),
+                is(participantsCountSQLResult)));
 
         assertEquals(participantsCountRDDResult, participantsCountDSLResult);
         assertEquals(participantsCountRDDResult, participantsCountSQLResult);

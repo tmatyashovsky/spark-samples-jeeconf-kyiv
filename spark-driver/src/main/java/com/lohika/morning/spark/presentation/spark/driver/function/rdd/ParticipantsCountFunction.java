@@ -1,6 +1,6 @@
 package com.lohika.morning.spark.presentation.spark.driver.function.rdd;
 
-import com.lohika.morning.spark.presentation.spark.driver.reader.RDDDataFilesReader;
+import com.lohika.morning.spark.presentation.spark.driver.reader.RDDDataReader;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.pair.PairParticipantEmailCountFunction;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.reduce.ReduceBySumValueFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ParticipantsCountFunction {
 
     @Autowired
-    private RDDDataFilesReader dataFilesReader;
+    private RDDDataReader dataFilesReader;
 
     public Long getData(final boolean includeOnlyPresentParticipants) {
         return dataFilesReader.readAllParticipants(includeOnlyPresentParticipants)

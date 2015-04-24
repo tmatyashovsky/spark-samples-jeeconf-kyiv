@@ -14,8 +14,8 @@ import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("programmaticDataFilesReader")
-public class ProgrammaticDataFilesReader implements DataFrameDataFilesReader {
+@Component("programmaticDataReader")
+public class ProgrammaticDataReader implements DataFrameDataReader {
 
     @Autowired
     private AnalyticsSqlSparkContext analyticsSqlSparkContext;
@@ -51,7 +51,7 @@ public class ProgrammaticDataFilesReader implements DataFrameDataFilesReader {
      * @return Spark-based structures
      */
     private StructType generateRowSchemaStructure() {
-        // TODO: meta data can be read from external meta data file if needed.
+        // Meta data can be read from external meta data file if needed.
         List<StructField> fields = new ArrayList<StructField>();
         fields.add(DataTypes.createStructField("firstName", DataTypes.StringType, true));
         fields.add(DataTypes.createStructField("lastName", DataTypes.StringType, true));

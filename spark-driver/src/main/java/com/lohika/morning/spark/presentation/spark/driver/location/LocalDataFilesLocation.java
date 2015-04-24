@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component("localDataFilesLocation")
 public class LocalDataFilesLocation implements DataFilesLocation {
 
-    @Value("${spark.path-to-local-data}")
+    @Value("${spark.path-to-csv-data}")
     private String path;
 
     @Override

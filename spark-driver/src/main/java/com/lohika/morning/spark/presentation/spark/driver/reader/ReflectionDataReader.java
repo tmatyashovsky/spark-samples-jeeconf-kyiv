@@ -7,14 +7,14 @@ import org.apache.spark.sql.DataFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("reflectionDataFilesReader")
-public class ReflectionDataFilesReader implements DataFrameDataFilesReader {
+@Component("reflectionDataReader")
+public class ReflectionDataReader implements DataFrameDataReader {
 
     @Autowired
     private AnalyticsSqlSparkContext analyticsSqlSparkContext;
 
     @Autowired
-    private RDDDataFilesReader rddDataFilesReader;
+    private RDDDataReader rddDataFilesReader;
 
     public DataFrame readAllParticipants(final boolean includeOnlyPresentParticipants) {
         JavaRDD<Participant> participantsAsRDD = rddDataFilesReader.readAllParticipants(includeOnlyPresentParticipants);

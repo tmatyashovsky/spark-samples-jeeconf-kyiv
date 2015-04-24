@@ -47,6 +47,9 @@ public class SparkContextConfiguration {
     @Value("${spark.sql.shuffle.partitions}")
     private String sqlShufflePartitions;
 
+    @Value("${spark.default.parallelism}")
+    private String defaultParallelism;
+
     @Bean
     public SparkConfigurationBuilder sparkConfigurationBuilder() {
         return new SparkConfigurationBuilder(master, applicationName, distributedLibraries, sparkProperties());
@@ -58,6 +61,7 @@ public class SparkContextConfiguration {
         sparkProperties.put("spark.executor.memory", executorMemory);
         sparkProperties.put("spark.serializer", serializer);
         sparkProperties.put("spark.sql.shuffle.partitions", sqlShufflePartitions);
+        sparkProperties.put("spark.default.parallelism", defaultParallelism);
 
         return sparkProperties;
     }
@@ -65,6 +69,18 @@ public class SparkContextConfiguration {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public Map<String, String> jdbcOptions() {
+        // Just to show simple JDBC example based on Postgres.
+        Map<String, String> options = new HashMap<>();
+
+        options.put("url", "jdbc:postgresql://localhost:5432/spark_presentation");
+        options.put("dbtable", "public.participants");
+        options.put("driver", "org.postgresql.Driver");
+
+        return options;
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component("hdfsDataFilesLocation")
 public class HDFSFilesLocation implements DataFilesLocation {
 
-    @Value("${spark.path-to-hdfs-data}")
+    @Value("${spark.path-to-parquet-data}")
     private String path;
 
     @Override

@@ -1,7 +1,7 @@
 package com.lohika.morning.spark.presentation.spark.driver.function.rdd;
 
 import com.lohika.morning.spark.presentation.spark.driver.configuration.SparkContextConfiguration;
-import com.lohika.morning.spark.presentation.spark.driver.reader.RDDDataFilesReader;
+import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSparkContext;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public abstract class FunctionTest {
 
     @Autowired
-    private RDDDataFilesReader rddDataFilesReader;
+    private AnalyticsSparkContext analyticsSparkContext;
 
     @After
     public void tearDown() {
-        rddDataFilesReader.getAnalyticsSparkContext().getJavaSparkContext().stop();
+        analyticsSparkContext.getJavaSparkContext().stop();
     }
 }

@@ -1,5 +1,9 @@
 package com.lohika.morning.spark.presentation.spark.driver.configuration;
 
+import com.lohika.morning.spark.presentation.spark.distributed.library.type.EventsByParticipant;
+import com.lohika.morning.spark.presentation.spark.distributed.library.type.Participant;
+import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
+import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantsByCompany;
 import java.util.Map;
 import org.apache.spark.SparkConf;
 
@@ -27,21 +31,18 @@ public class SparkConfigurationBuilder {
                 .setJars(jars)
                 .set("spark.cores.max", sparkProperties.get("spark.cores.max"))
                 .set("spark.executor.memory", sparkProperties.get("spark.executor.memory"))
-                .set("spark.sql.shuffle.partitions", sparkProperties.get("spark.sql.shuffle.partitions"));
+                .set("spark.sql.shuffle.partitions", sparkProperties.get("spark.sql.shuffle.partitions"))
+                .set("spark.default.parallelism", sparkProperties.get("spark.default.parallelism"))
+                .set("spark.serializer", sparkProperties.get("spark.serializer"));
 
         if (sparkProperties.get("spark.serializer").equals("org.apache.spark.serializer.KryoSerializer")) {
             sparkConf.set("spark.kryo.registrationRequired", "false");
-            //  if you don’t register your custom classes, Kryo will still work,
-            // but it will have to store the full class name with each object, which is wasteful.
-            // TODO: not working property due to bug in Spark.
-//            sparkConf.registerKryoClasses(new Class[]{EventsByParticipant.class,
-//                                                      Participant.class,
-//                                                      ParticipantEmailPosition.class,
-//                                                      ParticipantsByCompany.class,
-//                                                      scala.Tuple3[].class,
-//                                                      Row[].class,
-//                                                      GenericRow.class,
-//                                                      Object[].class, scala.reflect.ClassTag$.class});
+
+            sparkConf.registerKryoClasses(new Class[]{EventsByParticipant.class,
+                                                      Participant.class,
+                                                      ParticipantEmailPosition.class,
+                                                      ParticipantsByCompany.class
+                                                      });
         }
 
         return sparkConf;

@@ -1,6 +1,6 @@
 package com.lohika.morning.spark.presentation.spark.driver.function.rdd;
 
-import com.lohika.morning.spark.presentation.spark.driver.reader.RDDDataFilesReader;
+import com.lohika.morning.spark.presentation.spark.driver.reader.RDDDataReader;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.filter.FilterParticipantByPosition;
 import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.pair.PairParticipantEmailPositionFunction;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class ParticipantsByPositionFunction {
 
     @Autowired
-    private RDDDataFilesReader dataFilesReader;
+    private RDDDataReader dataFilesReader;
 
     public List<ParticipantEmailPosition> getData(final String position, final boolean includeOnlyPresentParticipants) {
         return dataFilesReader.readAllParticipants(includeOnlyPresentParticipants)

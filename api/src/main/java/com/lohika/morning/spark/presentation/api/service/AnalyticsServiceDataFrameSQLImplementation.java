@@ -7,7 +7,7 @@ import com.lohika.morning.spark.presentation.spark.distributed.library.function.
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.EventsByParticipant;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantEmailPosition;
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.ParticipantsByCompany;
-import com.lohika.morning.spark.presentation.spark.driver.reader.DataFrameDataFilesReader;
+import com.lohika.morning.spark.presentation.spark.driver.reader.DataFrameDataReader;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.lang.WordUtils;
@@ -20,7 +20,7 @@ import scala.reflect.ClassTag$;
 public class AnalyticsServiceDataFrameSQLImplementation implements AnalyticsService {
 
     @Resource(name = "${dataFrameDataFilesReader}")
-    private DataFrameDataFilesReader dataFrameDataFilesReader;
+    private DataFrameDataReader dataFrameDataFilesReader;
 
     @Override
     public List<ParticipantsByCompany> getParticipantsByCompanies(boolean includeOnlyPresentParticipants) {
@@ -29,15 +29,17 @@ public class AnalyticsServiceDataFrameSQLImplementation implements AnalyticsServ
 
         SQLContext sqlContext = dataFrameDataFilesReader.getAnalyticsSqlSparkContext().getSqlContext();
 
-        // TODO: think about this.
+        DataFrame uniqueParticipantsByCompanies = sqlContext.sql("select email, companyName, count(companyName) as duplicatesByParticipant " +
+                "from participants " +
+                        "group by companyName, email");
+
+        uniqueParticipantsByCompanies.registerTempTable("uniqueParticipantsByCompanies");
+
         DataFrame results = sqlContext.sql(
                 "select companyName, count(companyName) as countByCompany " +
-                        "from (select email, companyName, firstName, lastName, count(companyName) as duplicatesByParticipant " +
-                            "from participants " +
-                            "group by companyName, email, firstName, lastName " +
-                            "order by duplicatesByParticipant desc) " +
+                        "from uniqueParticipantsByCompanies " +
                         "group by companyName " +
-                        "orderBy countByCompany desc");
+                        "order by countByCompany desc, companyName asc");
 
         return results.map(new ToParticipantsByCompanyFunction(), ClassTag$.MODULE$.<ParticipantsByCompany>apply(ParticipantsByCompany.class))
                 .toJavaRDD()
@@ -73,7 +75,8 @@ public class AnalyticsServiceDataFrameSQLImplementation implements AnalyticsServ
                 "select email, position from participants " +
                         "group by email, position " +
                         "having position like \"%" + position + "%\"" +
-                            " or position like \"%" + WordUtils.capitalize(position) + "%\"");
+                            " or position like \"%" + WordUtils.capitalize(position) + "%\" " +
+                        "order by email asc, position asc");
 
         return results.map(new ToParticipantEmailPositionFunction(), ClassTag$.MODULE$.<ParticipantEmailPosition>apply(ParticipantEmailPosition.class))
                 .toJavaRDD()
