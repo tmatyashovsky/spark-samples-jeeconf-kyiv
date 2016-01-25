@@ -67,6 +67,8 @@ public class SparkContextConfiguration {
     }
 
     @Bean
+    // Static is extremely important here.
+    // It should be created before @Configuration as it is also component.
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }

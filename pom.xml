@@ -16,9 +16,9 @@
     </modules>
 
     <properties>
-        <springframework.version>4.1.6.RELEASE</springframework.version>
-        <spring-boot.version>1.2.4.RELEASE</spring-boot.version>
-        <spark.version>1.4.0</spark.version>
+        <springframework.version>4.2.4.RELEASE</springframework.version>
+        <spring-boot.version>1.3.2.RELEASE</spring-boot.version>
+        <spark.version>1.6.0</spark.version>
         <slf4j.version>1.7.12</slf4j.version>
         <logback.version>1.1.3</logback.version>
         <postgres.version>9.4-1201-jdbc41</postgres.version>
