@@ -7,6 +7,9 @@ public class ParticipantsByCompany implements Serializable {
     private String companyName;
     private Long participantsCount;
 
+    public ParticipantsByCompany() {
+    }
+
     public ParticipantsByCompany(String companyName, Long participantsCount) {
         this.companyName = companyName;
         this.participantsCount = participantsCount;
@@ -18,6 +21,14 @@ public class ParticipantsByCompany implements Serializable {
 
     public Long getParticipantsCount() {
         return participantsCount;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setParticipantsCount(Long participantsCount) {
+        this.participantsCount = participantsCount;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.lohika.morning.spark.presentation.spark.distributed.library.function.dataframe.map;
+package com.lohika.morning.spark.presentation.spark.distributed.library.function.dataset.map;
 
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.Participant;
 import java.io.Serializable;

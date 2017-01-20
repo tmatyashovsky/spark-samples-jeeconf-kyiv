@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
@@ -35,12 +35,12 @@ public class ConverterService {
             JavaRDD<Row> participantsAsRows = analyticsSparkContext.getJavaSparkContext().textFile(eventFileName)
                 .map(new FileContentToParticipantRowFunction());
 
-            DataFrame participantsAsDataFrame = analyticsSqlSparkContext.getSqlContext()
+            Dataset<Row> participantsAsDataset = analyticsSqlSparkContext.getSqlContext()
                 .createDataFrame(participantsAsRows, generateRowSchemaStructure());
 
             String eventFileNameWithExtension = FilenameUtils.removeExtension(eventFileName);
 
-            participantsAsDataFrame.saveAsParquetFile(eventFileNameWithExtension + ".parquet");
+            participantsAsDataset.write().parquet(eventFileNameWithExtension + ".parquet");
         }
     }
 

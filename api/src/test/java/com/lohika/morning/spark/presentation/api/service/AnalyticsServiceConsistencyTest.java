@@ -34,10 +34,10 @@ public class AnalyticsServiceConsistencyTest {
     private AnalyticsServiceRDDImplementation rddImplementation;
 
     @Autowired
-    private AnalyticsServiceDataFrameDSLImplementation dslImplementation;
+    private AnalyticsServiceDatasetDSLImplementation dslImplementation;
 
     @Autowired
-    private AnalyticsServiceDataFrameSQLImplementation sqlImplementation;
+    private AnalyticsServiceDatasetSQLImplementation sqlImplementation;
 
     @After
     public void tearDown() {

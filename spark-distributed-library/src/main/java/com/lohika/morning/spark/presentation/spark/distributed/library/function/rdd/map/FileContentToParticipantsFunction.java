@@ -1,14 +1,14 @@
 package com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.map;
 
 import com.lohika.morning.spark.presentation.spark.distributed.library.type.Participant;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import scala.Tuple2;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 public class FileContentToParticipantsFunction implements FlatMapFunction<Tuple2<String, String>, Participant> {
 
@@ -19,7 +19,7 @@ public class FileContentToParticipantsFunction implements FlatMapFunction<Tuple2
     }
 
     @Override
-    public Iterable<Participant> call(Tuple2<String, String> filenameAndContent) throws Exception {
+    public Iterator<Participant> call(Tuple2<String, String> filenameAndContent) throws Exception {
         StringTokenizer stringTokenizer = new StringTokenizer(filenameAndContent._2(), "\r");
 
         List<Participant> participants = new ArrayList<>();
@@ -37,7 +37,7 @@ public class FileContentToParticipantsFunction implements FlatMapFunction<Tuple2
             }
         }
 
-        return participants;
+        return participants.iterator();
     }
 
     private Participant toParticipant(String participantRow) {

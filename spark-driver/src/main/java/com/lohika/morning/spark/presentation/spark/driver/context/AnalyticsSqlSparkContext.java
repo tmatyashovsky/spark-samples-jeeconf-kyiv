@@ -2,7 +2,8 @@ package com.lohika.morning.spark.presentation.spark.driver.context;
 
 import com.lohika.morning.spark.presentation.spark.driver.location.HDFSFilesLocation;
 import org.apache.spark.SparkContext;
-import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class AnalyticsSqlSparkContext implements InitializingBean {
         return sqlContext;
     }
 
-    public DataFrame readRawData() {
+    public Dataset<Row> readRawData() {
         return sqlContext.parquetFile(this.dataFilesLocation.getPath());
     }
 

@@ -7,6 +7,9 @@ public class ParticipantEmailPosition implements Serializable, Comparable<Partic
     private String email;
     private String position;
 
+    public ParticipantEmailPosition() {
+    }
+
     public ParticipantEmailPosition(String email, String position) {
         this.email = email;
         this.position = position;
@@ -18,6 +21,14 @@ public class ParticipantEmailPosition implements Serializable, Comparable<Partic
 
     public String getPosition() {
         return position;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     @Override

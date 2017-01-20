@@ -7,6 +7,9 @@ public class EventsByParticipant implements Serializable {
     private String email;
     private Long eventsCount;
 
+    public EventsByParticipant() {
+    }
+
     public EventsByParticipant(String email, Long eventsCount) {
         this.email = email;
         this.eventsCount = eventsCount;
@@ -18,6 +21,14 @@ public class EventsByParticipant implements Serializable {
 
     public Long getEventsCount() {
         return eventsCount;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setEventsCount(Long eventsCount) {
+        this.eventsCount = eventsCount;
     }
 
     @Override

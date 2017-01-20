@@ -1,19 +1,20 @@
 package com.lohika.morning.spark.presentation.spark.driver.reader;
 
 import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSqlSparkContext;
-import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("parquetDataReader")
-public class ParquetDataReader implements DataFrameDataReader {
+public class ParquetDataReader implements DatasetDataReader {
 
     @Autowired
     private AnalyticsSqlSparkContext analyticsSqlSparkContext;
 
     @Override
-    public DataFrame readAllParticipants(boolean includeOnlyPresentParticipants) {
-        DataFrame participantsAsDataFrames = analyticsSqlSparkContext.readRawData();
+    public Dataset<Row> readAllParticipants(boolean includeOnlyPresentParticipants) {
+        Dataset<Row> participantsAsDataFrames = analyticsSqlSparkContext.readRawData();
 
         if (includeOnlyPresentParticipants) {
             participantsAsDataFrames = participantsAsDataFrames.filter(participantsAsDataFrames.col("present").equalTo(true));

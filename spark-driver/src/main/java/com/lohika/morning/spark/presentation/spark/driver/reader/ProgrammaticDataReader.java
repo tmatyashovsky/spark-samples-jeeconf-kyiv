@@ -1,12 +1,12 @@
 package com.lohika.morning.spark.presentation.spark.driver.reader;
 
+import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.map.FileContentToParticipantRowsFunction;
 import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSparkContext;
 import com.lohika.morning.spark.presentation.spark.driver.context.AnalyticsSqlSparkContext;
-import com.lohika.morning.spark.presentation.spark.distributed.library.function.rdd.map.FileContentToParticipantRowsFunction;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("programmaticDataReader")
-public class ProgrammaticDataReader implements DataFrameDataReader {
+public class ProgrammaticDataReader implements DatasetDataReader {
 
     @Autowired
     private AnalyticsSqlSparkContext analyticsSqlSparkContext;
@@ -24,7 +24,7 @@ public class ProgrammaticDataReader implements DataFrameDataReader {
     private AnalyticsSparkContext analyticsSparkContext;
 
     @Override
-    public DataFrame readAllParticipants(boolean includeOnlyPresentParticipants) {
+    public Dataset<Row> readAllParticipants(boolean includeOnlyPresentParticipants) {
         JavaRDD<Row> participantsRowRDD = getParticipantsRowRDD(includeOnlyPresentParticipants);
 
         return createDataFrame(participantsRowRDD);
@@ -35,10 +35,10 @@ public class ProgrammaticDataReader implements DataFrameDataReader {
                     .flatMap(new FileContentToParticipantRowsFunction(includeOnlyPresentParticipants));
     }
 
-    private DataFrame createDataFrame(JavaRDD<Row> participantsRowRDD) {
+    private Dataset<Row> createDataFrame(JavaRDD<Row> participantsRowRDD) {
         StructType schema = generateRowSchemaStructure();
 
-        DataFrame participantsAsDataFrames = analyticsSqlSparkContext.getSqlContext().createDataFrame(participantsRowRDD, schema);
+        Dataset<Row> participantsAsDataFrames = analyticsSqlSparkContext.getSqlContext().createDataFrame(participantsRowRDD, schema);
         // In case we would like to execute traditional SQL.
         participantsAsDataFrames.registerTempTable("participants");
 
