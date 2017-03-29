@@ -76,7 +76,7 @@ public class AnalyticsServiceDatasetDSLImplementation implements AnalyticsServic
             .groupBy("email")
             .count()
             .orderBy("email")
-            .map(new ToParticipantEmailFunction(), Encoders.bean(String.class))
+            .map(new ToParticipantEmailFunction(), Encoders.STRING())
             .toJavaRDD()
             .collect();
     }
